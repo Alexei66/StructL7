@@ -1,5 +1,4 @@
-﻿using Example_751;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +16,10 @@ namespace StructL7
 
         private string[] titles; // массив, храняий заголовки полей. используется в PrintDbToConsole
 
+        /// <summary>
+        /// Констрктор
+        /// </summary>
+        /// <param name="Path">Путь в файлу с данными</param>
         public Possibilities(string Path)
         {
             this.path = Path; // Сохранение пути к файлу с данными
@@ -27,33 +30,26 @@ namespace StructL7
             this.Load(); // Загрузка данных
         }
 
+        /// <summary>
+        /// Метод загрузки данных
+        /// </summary>
         private void Load()
         {
-            using (StreamReader sr = new StreamReader(this.path))
+            using StreamReader sr = new(this.path);
+            titles = sr.ReadLine().Split(',');
+
+            while (!sr.EndOfStream)
             {
-                titles = sr.ReadLine().Split(',');
+                string[] args = sr.ReadLine().Split(',');
 
-                while (!sr.EndOfStream)
-                {
-                    string[] args = sr.ReadLine().Split(',');
-
-                    AddRecord(new Diary(Convert.ToInt32(args[0]), DateTime.Parse(args[1]), args[2], args[3], args[4]));
-                }
+                AddRecord(new Diary(Convert.ToInt32(args[0]), args[2], args[3], args[4], DateTime.Parse(args[1])));
             }
         }
 
-        public void AddRecord()
-        { }
-
-        private static void DeleteRecord()
-        { }
-
-        public void EditRecord()
-        { }
-
-        private static void Save()
-        { }
-
+        /// <summary>
+        /// Метод увеличения текущего хранилища
+        /// </summary>
+        /// <param name="Flag">Условие увеличения</param>
         private void Resize(bool Flag)
         {
             if (Flag)
@@ -61,5 +57,50 @@ namespace StructL7
                 Array.Resize(ref this.diary, this.diary.Length * 2);
             }
         }
+
+        public void AddRecord(Diary ConcreteDiary)
+        {
+            this.Resize(index >= this.diary.Length);
+            this.diary[index] = ConcreteDiary;
+            this.index++;
+        }
+
+        private static void DeleteRecord(int id)
+        { }
+
+        public void EditRecord(int id)
+        { }
+
+        /// <summary>
+        /// Метод сохранения данных
+        /// </summary>
+        /// <param name="Path">Путь к файлу сохранения</param>
+        public void Save(string Path)
+        {
+            using StreamWriter stream = new(Path);
+            foreach (Diary e in diary)
+            {
+                stream.WriteLine(diary.ToString());
+            }
+        }
+
+        /// <summary>
+        /// Вывод данных в консоль
+        /// </summary>
+        public void PrintDbToConsole()
+        {
+            Console.WriteLine($"{this.titles[0],5} {this.titles[1],15} {this.titles[2],15} {this.titles[3],15} {this.titles[4],10}");
+
+            for (int i = 0; i < index; i++)
+            {
+                Console.WriteLine(this.diary[i].Print());
+            }
+        }
+
+        /// <summary>
+        /// Количество сотрудников в хранилище
+        /// </summary>
+        public int Count
+        { get { return this.index; } }
     }
 }

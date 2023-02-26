@@ -11,7 +11,7 @@ namespace StructL7
         /// <summary>
         /// Номер записи
         /// </summary>
-        public int id;
+        private int id;
 
         /// <summary>
         /// Время записи
@@ -56,13 +56,13 @@ namespace StructL7
         /// <param name="ToDoList"></param>
         /// <param name="MainTask"></param>
         /// <param name="AuthorsName"></param>
-        public Diary(int Id, DateTime CurrentDateTime, string ToDoList, string MainTask, string AuthorsName)
+        public Diary(int Id, string ToDoList, string MainTask, string AuthorsName, DateTime CurrentDateTime)
         {
             this.id = Id;
-            this.currentDateTime = CurrentDateTime;
             this.toDoList = ToDoList;
             this.authorsName = AuthorsName;
             this.mainTask = MainTask;
+            this.currentDateTime = CurrentDateTime;
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace StructL7
         /// <returns></returns>
         public string Print()
         {
-            return $"{this.id,10} {this.currentDateTime,10} {this.toDoList,10} {this.mainTask,10}  {this.authorsName,10}";
+            return $"{this.id,10}  {this.toDoList,10} {this.mainTask,10}  {this.authorsName,10} {this.currentDateTime,10}";
         }
     }
 }
